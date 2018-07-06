@@ -3,7 +3,6 @@ package pageobjects;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import org.openqa.selenium.By;
 
 public class DashboardPO extends BasePO {
 
@@ -25,15 +24,17 @@ public class DashboardPO extends BasePO {
         waitUtils.waitForElementToBeVisible(addLocationFloatingButton, driver);
     }
 
-    public void tapOnAddLocationFloatingButton(){
+    public SearchPO tapOnAddLocationFloatingButton(){
         addLocationFloatingButton.click();
+        return new SearchPO(driver);
     }
 
     @AndroidFindBy(xpath = "//android.widget.TextView[@text='Dublin']")
     AndroidElement dublinCityTextView;
 
-    public void tapOnDublinCityTextView(){
+    public TempretureDetailsPO tapOnDublinCityTextView(){
         dublinCityTextView.click();
+        return new TempretureDetailsPO(driver);
     }
 //
 //    @AndroidFindBy(id = "com.shpock.android:id/search_src_text")

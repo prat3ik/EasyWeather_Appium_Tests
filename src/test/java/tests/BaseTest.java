@@ -38,7 +38,7 @@ public abstract class BaseTest {
     public static AndroidDriver<AndroidElement> driver;
 
     public final static String APPIUM_SERVER_URL = PropertyUtils.getProperty("appium.server.url", "http://127.0.0.1:4723/wd/hub");
-    public final static String EXECUTION_TYPE = PropertyUtils.getProperty("execution.type", "aws");
+    public final static String EXECUTION_TYPE = PropertyUtils.getProperty("execution.type", "local");
     public final static int IMPLICIT_WAIT = PropertyUtils.getIntegerProperty("implicitWait", 30);
     public static WaitUtils waitUtils = new WaitUtils();
 
@@ -120,7 +120,7 @@ public abstract class BaseTest {
         String APP_FULL_RESET = PropertyUtils.getProperty("android.app.full.reset");
         String APP_NO_RESET = PropertyUtils.getProperty("android.app.no.reset");
 
-        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
+        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "uiautomator2");
         desiredCapabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
         desiredCapabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM_NAME);
         desiredCapabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, PLATFORM_VERSION);

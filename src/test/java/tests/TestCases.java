@@ -26,7 +26,10 @@ public class TestCases extends BaseTest {
         final String password = "test";
 
         dashboardPO.waitTillDashboardPOAppeared();
-        dashboardPO.tapOnDublinCityTextView();
+        TempretureDetailsPO tempretureDetailsPO = dashboardPO.tapOnDublinCityTextView();
+        tempretureDetailsPO.getTemp();
+        //SearchPO searchPO = dashboardPO.tapOnAddLocationFloatingButton();
+        //searchPO.addCity("Surat");
         waitUtils.staticWait(5000);
 
 
