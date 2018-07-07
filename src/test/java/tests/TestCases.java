@@ -57,7 +57,8 @@ public class TestCases extends BaseTest {
 //        dashboardPO.tapOnAddLocationFloatingButton();
 //        searchPO.addCity(perthCity);
 
-        dashboardPO.removeCity("Surat");
+        dashboardPO.removeCity(viennaCity);
+        dashboardPO.removeCity("London");
         waitUtils.staticWait(5000);
         //Assert.assertTrue(cityTempretureDetailsPO.getMakeOfferButton().isDisplayed(), "Make Offer button didn't display");
     }

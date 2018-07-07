@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import utils.AppiumUtils;
 
 import java.util.List;
@@ -49,6 +50,7 @@ public class DashboardPO extends BasePO {
         String lastCity1 = "";
         boolean isCityFound = false;
         List<AndroidElement> cityNameTextView = driver.findElements(By.id("com.example.harry.myapplication:id/textview_city_name"));
+        List<AndroidElement> cityNameCardContainer = driver.findElements(By.id("com.example.harry.myapplication:id/card_container"));
 
         while (!isCityFound) {
             lastCity1 = cityNameTextView.get(cityNameTextView.size()-1).getText();
@@ -56,14 +58,21 @@ public class DashboardPO extends BasePO {
             int index = 0;
             for (AndroidElement cityEl : cityNameTextView) {
                 System.out.print(cityEl.getText());
-                if (cityName.equals(cityEl.getText()))
+                if (cityName.equals(cityEl.getText())) {
+                    System.out.println(index);
+                    System.out.println("SizeCard::"+cityNameTextView.size());
+                    System.out.println("SizeCard::"+cityNameCardContainer.size());
+
+
                     return cityEl;// index;
-                index+=1;
+                }
+                index++;
                 System.out.print("::"+index);
                 System.out.println();
             }
             AppiumUtils.verticalScroll(driver);
             cityNameTextView = driver.findElements(By.id("com.example.harry.myapplication:id/textview_city_name"));
+            cityNameCardContainer = driver.findElements(By.id("com.example.harry.myapplication:id/card_container"));
             String lastCity2 = cityNameTextView.get(cityNameTextView.size()-1).getText();
             System.out.println("Last city 2::"+lastCity1);
 
@@ -82,12 +91,15 @@ public class DashboardPO extends BasePO {
         AndroidElement index = getCityCardIndex(cityName);
         List<AndroidElement> cityNameCardContainer = driver.findElements(By.id("com.example.harry.myapplication:id/card_container"));
         AndroidElement el = index;//cityNameCardContainer.get(index);
+        Dimension size = driver.manage().window().getSize();
+        int screenWidth = size.getWidth();
+        int screenHeight = size.getHeight();
         int leftX = el.getLocation().getX();
         int rightX = leftX + el.getSize().getWidth();
         int upperY = el.getLocation().getY();
         int lowerY = upperY + el.getSize().getHeight();
         int middleY = (upperY + lowerY) / 2;
-        AppiumUtils.doSwipe(rightX, middleY, leftX, middleY, driver);
+        AppiumUtils.doSwipe((int) (rightX+(screenWidth*0.3)), middleY, leftX, middleY, driver);
     }
 
 

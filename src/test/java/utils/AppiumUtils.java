@@ -10,6 +10,7 @@ import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.Dimension;
 
 import static io.appium.java_client.touch.WaitOptions.waitOptions;
+import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 
 /**
@@ -98,7 +99,7 @@ public class AppiumUtils {
         System.out.println("End X:" + endX);
         System.out.println("End Y:" + endY);
         TouchAction swipe = new TouchAction(driver).press(PointOption.point(startX, startY))
-                .waitAction(waitOptions(ofSeconds(1)))
+                .waitAction(waitOptions(ofMillis(800)))
                 .moveTo(PointOption.point(endX, endY)).release().perform();
     }
 
