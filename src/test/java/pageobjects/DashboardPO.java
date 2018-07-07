@@ -67,9 +67,6 @@ public class DashboardPO extends BasePO {
         int lowerY = upperY + el.getSize().getHeight();
         int middleY = (upperY + lowerY) / 2;
         AppiumUtils.doSwipe(rightX, middleY, leftX, middleY, driver);
-
-        //cityNameCardContainer.get(index).click();
-
     }
 
 
