@@ -67,6 +67,21 @@ public class AppiumUtils {
     }
 
 
+    /**This method will use to scroll vertically
+     *
+     * @param driver
+     */
+    public static void verticalScroll(AppiumDriver driver){
+        Dimension size = driver.manage().window().getSize();
+        int start_Y = (int) (size.getHeight() * 0.80);
+        int end_Y = (int) (size.getHeight() * 0.20);
+        int start_end_X = (int) (size.getWidth() * 0.50);
+
+        TouchAction swipe = new TouchAction(driver).press(PointOption.point(start_end_X, start_Y))
+                .waitAction(waitOptions(ofSeconds(2)))
+                .moveTo(PointOption.point(start_end_X, end_Y)).release().perform();
+    }
+
     /**
      * This method would swipe on Screen, you need to pass 2 locations:
      * 1) Start Location(startX, startY)

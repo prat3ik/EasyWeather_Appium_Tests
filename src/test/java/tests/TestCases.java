@@ -23,22 +23,42 @@ public class TestCases extends BaseTest {
 
     @Test
     public void verifyUserCanMakeTheOffer() throws InterruptedException, IOException {
-        final List<String> citiesToBeAdded = Arrays.asList("Vienna", "Surat", "Berlin");
+        final List<String> citiesToBeAdded = Arrays.asList("Vienna", "Surat", "Berlin", "Tokyo","San Francisco","Torronto");
         final String password = "test";
+        final String viennaCity = "Vienna";
+        final String suratCity = "Surat";
+        final String berlinCity = "Berlin";
+        final String sanFranciscoCity = "San Francisco";
+        final String torrontoCity = "Torronto";
+        final String beijingCity = "Beijing";
+        final String capeTownCity = "Cape town";
+        final String perthCity = "Perth";
 
         dashboardPO.waitTillDashboardPOAppeared();
-        dashboardPO.removeCity(DefaultCities.LONDON.getCityName());
-        dashboardPO.removeCity(DefaultCities.DUBLIN.getCityName());
-        dashboardPO.removeCity(DefaultCities.BARCELONA.getCityName());
+//        dashboardPO.removeCity(DefaultCities.LONDON.getCityName());
+//        dashboardPO.removeCity(DefaultCities.DUBLIN.getCityName());
+//        dashboardPO.removeCity(DefaultCities.BARCELONA.getCityName());
 
 
+//        SearchPO searchPO = dashboardPO.tapOnAddLocationFloatingButton();
+//        searchPO.addCity(viennaCity);
+//        dashboardPO.tapOnAddLocationFloatingButton();
+//        searchPO.addCity(suratCity);
+//        dashboardPO.tapOnAddLocationFloatingButton();
+//        searchPO.addCity(berlinCity);
+//        dashboardPO.tapOnAddLocationFloatingButton();
+//        searchPO.addCity(sanFranciscoCity);
+//        dashboardPO.tapOnAddLocationFloatingButton();
+//        searchPO.addCity(torrontoCity);
+//        dashboardPO.tapOnAddLocationFloatingButton();
+//        searchPO.addCity(beijingCity);
+//        dashboardPO.tapOnAddLocationFloatingButton();
+//        searchPO.addCity(capeTownCity);
+//        dashboardPO.tapOnAddLocationFloatingButton();
+//        searchPO.addCity(perthCity);
 
-
-        //SearchPO searchPO = dashboardPO.tapOnAddLocationFloatingButton();
-        //searchPO.addCity("Surat");
+        dashboardPO.removeCity("Surat");
         waitUtils.staticWait(5000);
-
-
         //Assert.assertTrue(cityTempretureDetailsPO.getMakeOfferButton().isDisplayed(), "Make Offer button didn't display");
     }
 
@@ -49,11 +69,9 @@ public class TestCases extends BaseTest {
         BARCELONA("Barcelona");
 
         String cityName;
-
         DefaultCities(String cityName) {
             this.cityName = cityName;
         }
-
         public String getCityName() {
             return cityName;
         }

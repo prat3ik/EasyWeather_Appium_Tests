@@ -3,7 +3,7 @@ package pageobjects;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import org.openqa.selenium.Point;
+import org.openqa.selenium.By;
 import utils.AppiumUtils;
 
 import java.util.List;
@@ -44,23 +44,44 @@ public class DashboardPO extends BasePO {
     @AndroidFindBy(id = "com.example.harry.myapplication:id/textview_city_name")
     List<AndroidElement> cityNameTextView;
 
-    public int getCityCardIndex(String cityName) {
-        int index = 0;
-        for (AndroidElement cityEl : cityNameTextView) {
-            System.out.println(cityEl.getText());
-            if (cityName.equals(cityEl.getText()))
-                return index;
-            index++;
-        }
-        return -1;
-    }
+    public AndroidElement getCityCardIndex(String cityName) {
+        String lastCityInLoop = "";
+        String lastCity1 = "";
+        boolean isCityFound = false;
+        List<AndroidElement> cityNameTextView = driver.findElements(By.id("com.example.harry.myapplication:id/textview_city_name"));
 
-    @AndroidFindBy(id = "com.example.harry.myapplication:id/card_container")
-    List<AndroidElement> cityNameCardContainer;
+        while (!isCityFound) {
+            lastCity1 = cityNameTextView.get(cityNameTextView.size()-1).getText();
+            System.out.println("Last city::"+lastCity1);
+            int index = 0;
+            for (AndroidElement cityEl : cityNameTextView) {
+                System.out.print(cityEl.getText());
+                if (cityName.equals(cityEl.getText()))
+                    return cityEl;// index;
+                index+=1;
+                System.out.print("::"+index);
+                System.out.println();
+            }
+            AppiumUtils.verticalScroll(driver);
+            cityNameTextView = driver.findElements(By.id("com.example.harry.myapplication:id/textview_city_name"));
+            String lastCity2 = cityNameTextView.get(cityNameTextView.size()-1).getText();
+            System.out.println("Last city 2::"+lastCity1);
+
+            if(lastCity1.equals(lastCity2)) {
+                System.out.println("Breaking the loop");
+                break;
+            }
+        }
+        return null;
+    }
+//
+//    @AndroidFindBy(id = "com.example.harry.myapplication:id/card_container")
+//    List<AndroidElement> cityNameCardContainer;
 
     public void removeCity(String cityName) {
-        int index = getCityCardIndex(cityName);
-        AndroidElement el = cityNameCardContainer.get(index);
+        AndroidElement index = getCityCardIndex(cityName);
+        List<AndroidElement> cityNameCardContainer = driver.findElements(By.id("com.example.harry.myapplication:id/card_container"));
+        AndroidElement el = index;//cityNameCardContainer.get(index);
         int leftX = el.getLocation().getX();
         int rightX = leftX + el.getSize().getWidth();
         int upperY = el.getLocation().getY();
