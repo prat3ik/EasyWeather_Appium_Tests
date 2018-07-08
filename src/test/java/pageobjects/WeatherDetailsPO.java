@@ -1,3 +1,7 @@
+/**
+ * Year: 2018-2019
+ * Pratik Patel(https://github.com/prat3ik)
+ */
 package pageobjects;
 
 import io.appium.java_client.AppiumDriver;
@@ -7,6 +11,11 @@ import org.testng.Assert;
 
 import java.util.List;
 
+/**
+ * Page Objects for Weather Details Screen
+ *
+ * @author prat3ik
+ */
 public class WeatherDetailsPO extends BasePO {
 
     protected WeatherDetailsPO(AppiumDriver driver) {
@@ -95,6 +104,41 @@ public class WeatherDetailsPO extends BasePO {
         return minTempretureTextView.get(4);
     }
 
+    @AndroidFindBy(accessibility = "Navigate up")
+    AndroidElement backArrow;
+
+    /**
+     * This method used to Navigate back to the Dashboard screen.
+     *
+     * @return
+     */
+    public DashboardPO backToDashboard() {
+        backArrow.click();
+        return new DashboardPO(driver);
+    }
+
+    /**
+     * This will Assert the Weather Details, And check whether all the information is displaying properly.
+     */
+    public void assertWeather() {
+        Assert.assertTrue(tempretureForTodayTextView.isDisplayed());
+        Assert.assertTrue(cityNameTextView.isDisplayed());
+        Assert.assertTrue(weatherConditionTextView.isDisplayed());
+        Assert.assertTrue(dayNameTextView.size() == 5, "Days were not displayed properly");
+        Assert.assertTrue(maxTempretureTextView.size() == 5, "Maximum tempreture may not displayed");
+        Assert.assertTrue(minTempretureTextView.size() == 5, "Minimum tempreture may not displayed");
+        Assert.assertTrue(getMaxTempretureForTwoDaysLater().isDisplayed());
+        Assert.assertTrue(getMinTempretureForFiveDaysLater().isDisplayed());
+    }
+
+    /**
+     * This is used to check whether Weather screen is loaded perfectly or not.
+     */
+    public void waitTillPageIsLoaded() {
+        waitUtils.waitForElementToBeVisible(cityNameTextView, driver);
+    }
+
+
     public void getTemp() {
         System.out.println(tempretureForTodayTextView.getText());
         System.out.println("MAX:");
@@ -120,29 +164,5 @@ public class WeatherDetailsPO extends BasePO {
         System.out.println(getMinTempretureForFiveDaysLater());
         System.out.print(getFifthDayName());
         System.out.println(getMinTempretureForSixDaysLater());
-
-    }
-
-    @AndroidFindBy(accessibility = "Navigate up")
-    AndroidElement backArrow;
-
-    public DashboardPO backToDashboard() {
-        backArrow.click();
-        return new DashboardPO(driver);
-    }
-
-    public void assertWeather() {
-        Assert.assertTrue(tempretureForTodayTextView.isDisplayed());
-        Assert.assertTrue(cityNameTextView.isDisplayed());
-        Assert.assertTrue(weatherConditionTextView.isDisplayed());
-        Assert.assertTrue(dayNameTextView.size()==5, "Days were not displayed properly");
-        Assert.assertTrue(maxTempretureTextView.size()==5,"Maximum tempreture may not displayed");
-        Assert.assertTrue(minTempretureTextView.size()==5,"Minimum tempreture may not displayed");
-        Assert.assertTrue(getMaxTempretureForTwoDaysLater().isDisplayed());
-        Assert.assertTrue(getMinTempretureForFiveDaysLater().isDisplayed());
-    }
-
-    public void waitTillPageIsLoaded() {
-        waitUtils.waitForElementToBeVisible(cityNameTextView, driver);
     }
 }

@@ -1,3 +1,7 @@
+/**
+ * Year: 2018-2019
+ * Pratik Patel(https://github.com/prat3ik)
+ */
 package pageobjects;
 
 import io.appium.java_client.AppiumDriver;
@@ -11,6 +15,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Page Objects for Dashboard(App Launching) Screen
+ *
+ * @author prat3ik
+ */
 public class DashboardPO extends BasePO {
 
     public DashboardPO(AppiumDriver driver) {
@@ -20,7 +29,7 @@ public class DashboardPO extends BasePO {
     @AndroidFindBy(xpath = "//android.widget.TextView[@text='Dublin']")
     AndroidElement firstCityName;
 
-    public void tapOnFirstCity(){
+    public void tapOnFirstCity() {
         firstCityName.click();
     }
 
@@ -32,11 +41,22 @@ public class DashboardPO extends BasePO {
             addLocationFloatingButton.click();
     }
 
+    /**
+     * This method will wait until Dashboard(Launching Screen) is present.
+     * Ideally this should be called at very first step of every test case.
+     *
+     * @throws InterruptedException
+     */
     public void waitTillDashboardPOAppeared() throws InterruptedException {
         Thread.sleep(500);
         waitUtils.waitForElementToBeVisible(addLocationFloatingButton, driver);
     }
 
+    /**
+     * It will Tap(Click) on Add City(Floating) button.
+     *
+     * @return
+     */
     public SearchPO tapOnAddLocationFloatingButton() {
         addLocationFloatingButton.click();
         return new SearchPO(driver);
@@ -45,6 +65,12 @@ public class DashboardPO extends BasePO {
     @AndroidFindBy(id = "com.example.harry.myapplication:id/textview_city_name")
     List<AndroidElement> cityNameTextView;
 
+    /**
+     * This method will give CardLayout index for given City Name.
+     *
+     * @param cityName
+     * @return
+     */
     public AndroidElement getCityCardIndex(String cityName) {
         String lastCityInLoop = "";
         String lastCity1 = "";
@@ -68,7 +94,11 @@ public class DashboardPO extends BasePO {
         }
         return null;
     }
-    public WeatherDetailsPO tapOnCity(String cityName){
+
+    /**
+     * This method will tap on particular city
+     */
+    public WeatherDetailsPO tapOnCity(String cityName) {
         AndroidElement el = getCityCardIndex(cityName);
         el.click();
         WeatherDetailsPO po = new WeatherDetailsPO(driver);
@@ -76,6 +106,11 @@ public class DashboardPO extends BasePO {
         return po;
     }
 
+    /**
+     * It will remove given city from Dashboard
+     *
+     * @param cityName
+     */
     public void removeCity(String cityName) {
         AndroidElement el = getCityCardIndex(cityName);
         Dimension size = driver.manage().window().getSize();
@@ -89,6 +124,11 @@ public class DashboardPO extends BasePO {
         AppiumUtils.doSwipe((int) (rightX + (screenWidth * 0.3)), middleY, leftX, middleY, driver);
     }
 
+    /**
+     * This method is used to get All City Names.
+     *
+     * @return
+     */
     public Set<String> getAllCities() {
         boolean isLastCityPresent = false;
         Set<String> cityNames = new HashSet<String>();
@@ -109,28 +149,11 @@ public class DashboardPO extends BasePO {
         return cityNames;
     }
 
+    /**
+     * This method will scroll until The First city on Dashboard is reached.
+     */
     public void moveToFirstCity() {
         AppiumUtils.scrollUpToElement(firstCityName, driver);
     }
-
-
-//    public void searchItem(String productText) {
-//        searchButton.click();
-//        searchTextField.sendKeys(productText);
-//        waitUtils.staticWait(1500);
-//        driver.findElement(By.id("com.shpock.android:id/search_item_title")).click();
-//        tapOnHintGotItButton();
-//    }
-//
-//    @AndroidFindBy(id = "com.shpock.android:id/itemContainer")
-//    AndroidElement firstProductCard;
-//
-//    public CityTempretureDetailsPO tapOnFirstProduct(){
-//        firstProductCard.click();
-//        CityTempretureDetailsPO cityTempretureDetailsPO = new CityTempretureDetailsPO(driver);
-//        cityTempretureDetailsPO.tapOnHintGotItButton();
-//        cityTempretureDetailsPO.tapOnHintGotItButton();
-//        return cityTempretureDetailsPO;
-//    }
 
 }

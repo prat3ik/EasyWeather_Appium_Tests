@@ -1,3 +1,7 @@
+/**
+ * Year: 2018-2019
+ * Pratik Patel(https://github.com/prat3ik)
+ */
 package pageobjects;
 
 import io.appium.java_client.AppiumDriver;
@@ -11,10 +15,12 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
+/**
+ * This is Base Page Object, Every Page Object should extend this Class.
+ * It will initialize PageFactory.
+ * @author prat3ik
+ */
 public class BasePO {
     private static final int KEYBOARD_ANIMATION_DELAY = 1000;
     private static final int XML_REFRESH_DELAY = 1000;

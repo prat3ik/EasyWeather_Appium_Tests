@@ -1,11 +1,13 @@
+/**
+ * Year: 2018-2019
+ * Pratik Patel(https://github.com/prat3ik)
+ */
 package utils;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
-import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
-import io.appium.java_client.ios.IOSElement;
 import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.Dimension;
 
@@ -15,6 +17,8 @@ import static java.time.Duration.ofSeconds;
 
 /**
  * This class contains custom appium/selenium methods for Webelement
+ *
+ * @author prat3ik
  */
 public class AppiumUtils {
     public static WaitUtils waitUtils = new WaitUtils();

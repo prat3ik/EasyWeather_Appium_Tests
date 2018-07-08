@@ -1,9 +1,17 @@
+/**
+ * Year: 2018-2019
+ * Pratik Patel(https://github.com/prat3ik)
+ */
 package utils;
 
 import org.testng.Assert;
 
 import java.util.List;
-
+/**
+ * This will contain all Assert related utility methods.
+ *
+ * @author prat3ik
+ */
 public class AssertUtils {
 
     public static void assertListEquals(List actualList, List expectedList, String listName) {

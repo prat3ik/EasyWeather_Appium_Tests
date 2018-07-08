@@ -1,16 +1,12 @@
 /**
  * Year: 2018-2019
- * Pratik Patel
+ * Pratik Patel(https://github.com/prat3ik)
  */
 package tests;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
-import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.ios.IOSElement;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
-import io.appium.java_client.remote.AutomationName;
-import io.appium.java_client.remote.IOSMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
@@ -56,7 +52,7 @@ public abstract class BaseTest {
      * Appium is a client - server model:
      * So we need to set up appium client in order to connect to Device Farm's appium server.
      */
-    @BeforeSuite
+    @BeforeMethod
     public void setUpAppium() throws MalformedURLException {
         //Use a empty DesiredCapabilities object for aws and for local execution set the desired capabilities
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -87,7 +83,7 @@ public abstract class BaseTest {
             if (!EXECUTION_TYPE.equals("aws"))
                 takeLocalScreenshot(result.getMethod().getMethodName());
         }
-        //resetApp();
+//        resetApp();
     }
 
     /**

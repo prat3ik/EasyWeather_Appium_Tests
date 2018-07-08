@@ -1,25 +1,32 @@
+/**
+ * Year: 2018-2019
+ * Pratik Patel(https://github.com/prat3ik)
+ */
 package tests;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
-import pageobjects.*;
+import pageobjects.DashboardPO;
+import pageobjects.SearchPO;
+import pageobjects.WeatherDetailsPO;
 import utils.AssertUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static java.time.Duration.ofSeconds;
-
+/**
+ * This class contains Test Cases for Easy Weather app(https://github.com/danprado/easyweather)
+ *
+ * @author prat3ik
+ */
 public class TestCases extends BaseTest {
-
-    DashboardPO dashboardPO;
-    SoftAssert softAssert = new SoftAssert();
 
     @BeforeTest
     @Override
     public void setUpPage() {
-        dashboardPO = new DashboardPO(driver);
     }
 
 
@@ -28,7 +35,7 @@ public class TestCases extends BaseTest {
      * <p>
      * Assertions:
      * 1) Default cities must be present when app is installed and opened first time.
-     * 2) User can verify weather details for existing/newwly added cities
+     * 2) User can verify weather details for existing/newly added cities.
      * 3) After App restart the behaviour remains same and User can again check the weather details for existing cities.
      *
      * @throws InterruptedException
@@ -39,6 +46,8 @@ public class TestCases extends BaseTest {
         final String suratCity = "Surat";
         final String sanFranciscoCity = "San Francisco";
 
+        DashboardPO dashboardPO = new DashboardPO(driver);
+
         List<String> defaultCities = DefaultCities.getDefaultCities();
         Set<String> expectedAvailableCitiesOnDashboard = new HashSet<String>();
         expectedAvailableCitiesOnDashboard.addAll(defaultCities);
@@ -46,36 +55,38 @@ public class TestCases extends BaseTest {
         expectedAvailableCitiesOnDashboard.add(sanFranciscoCity);
 
         dashboardPO.waitTillDashboardPOAppeared();
-        AssertUtils.assertListEquals(new ArrayList<String>(dashboardPO.getAllCities()), DefaultCities.getDefaultCities(), "Default Cities");
+        ArrayList<String> allAvailableCities = new ArrayList<String>(dashboardPO.getAllCities());
+        System.out.println("First::" + allAvailableCities);
+        AssertUtils.assertListEquals(allAvailableCities, DefaultCities.getDefaultCities(), "Default Cities");
 
         WeatherDetailsPO weatherDetailsPO = dashboardPO.tapOnCity(londonCity);
         weatherDetailsPO.assertWeather();
         dashboardPO = weatherDetailsPO.backToDashboard();
 
-        SearchPO searchPO = this.dashboardPO.tapOnAddLocationFloatingButton();
+        SearchPO searchPO = dashboardPO.tapOnAddLocationFloatingButton();
         searchPO.addCity(suratCity);
-        searchPO = this.dashboardPO.tapOnAddLocationFloatingButton();
+        searchPO = dashboardPO.tapOnAddLocationFloatingButton();
         searchPO.addCity(sanFranciscoCity);
 
-        weatherDetailsPO = this.dashboardPO.tapOnCity(suratCity);
+        weatherDetailsPO = dashboardPO.tapOnCity(suratCity);
         weatherDetailsPO.assertWeather();
         dashboardPO = weatherDetailsPO.backToDashboard();
-        weatherDetailsPO = this.dashboardPO.tapOnCity(sanFranciscoCity);
+        weatherDetailsPO = dashboardPO.tapOnCity(sanFranciscoCity);
         weatherDetailsPO.assertWeather();
         dashboardPO = weatherDetailsPO.backToDashboard();
 
         this.restartApp();
 
-        Set<String> actualAvailableAllCitiesOnDashboard = this.dashboardPO.getAllCities();
+        Set<String> actualAvailableAllCitiesOnDashboard = dashboardPO.getAllCities();
         AssertUtils.assertListEquals(new ArrayList<String>(actualAvailableAllCitiesOnDashboard), new ArrayList<String>(expectedAvailableCitiesOnDashboard), "Available Cities on Dashboard");
 
-        weatherDetailsPO = this.dashboardPO.tapOnCity(londonCity);
+        weatherDetailsPO = dashboardPO.tapOnCity(londonCity);
         weatherDetailsPO.assertWeather();
         weatherDetailsPO.backToDashboard();
-        weatherDetailsPO = this.dashboardPO.tapOnCity(suratCity);
+        weatherDetailsPO = dashboardPO.tapOnCity(suratCity);
         weatherDetailsPO.assertWeather();
         weatherDetailsPO.backToDashboard();
-        weatherDetailsPO = this.dashboardPO.tapOnCity(sanFranciscoCity);
+        weatherDetailsPO = dashboardPO.tapOnCity(sanFranciscoCity);
         weatherDetailsPO.assertWeather();
     }
 
@@ -83,8 +94,8 @@ public class TestCases extends BaseTest {
      * This test verify that User can add and remove the cities, and cities list does not change when app restarts.
      * <p>
      * Assertions:
-     * 1) Added cities must be present and Removed cities must not be present on Dashboard
-     * 2) After restarting of the app valid cities must be visible
+     * 1) Added cities must be present and Removed cities must not be present on Dashboard.
+     * 2) After restarting of the app valid cities must be visible and also verify the weather data again.
      *
      * @throws InterruptedException
      * @throws IOException
@@ -117,6 +128,7 @@ public class TestCases extends BaseTest {
         expectedAvailableCitiesOnDashboard.add(istanbulCity);
         expectedAvailableCitiesOnDashboard.add(perthCity);
 
+        DashboardPO dashboardPO = new DashboardPO(driver);
         dashboardPO.waitTillDashboardPOAppeared();
         SearchPO searchPO = dashboardPO.tapOnAddLocationFloatingButton();
         searchPO.addCity(viennaCity);
@@ -154,9 +166,13 @@ public class TestCases extends BaseTest {
         this.restartApp();
 
         actualAvailableAllCitiesOnDashboard = dashboardPO.getAllCities();
+        System.out.println("Last::" + actualAvailableAllCitiesOnDashboard);
         AssertUtils.assertListEquals(new ArrayList<String>(actualAvailableAllCitiesOnDashboard), new ArrayList<String>(expectedAvailableCitiesOnDashboard), "Available Cities on Dashboard");
     }
 
+    /**
+     * Enum for Default Cities available at Dashboard
+     */
     public enum DefaultCities {
         DUBLIN("Dublin"),
         LONDON("London"),
@@ -181,6 +197,6 @@ public class TestCases extends BaseTest {
             defaultCities.add(BARCELONA.getCityName());
             return defaultCities;
         }
-    }
 
+    }
 }
