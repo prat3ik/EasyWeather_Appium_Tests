@@ -7,7 +7,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import utils.AppiumUtils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DashboardPO extends BasePO {
 
@@ -50,33 +52,18 @@ public class DashboardPO extends BasePO {
         String lastCity1 = "";
         boolean isCityFound = false;
         List<AndroidElement> cityNameTextView = driver.findElements(By.id("com.example.harry.myapplication:id/textview_city_name"));
-        List<AndroidElement> cityNameCardContainer = driver.findElements(By.id("com.example.harry.myapplication:id/card_container"));
 
         while (!isCityFound) {
-            lastCity1 = cityNameTextView.get(cityNameTextView.size()-1).getText();
-            System.out.println("Last city::"+lastCity1);
-            int index = 0;
+            lastCity1 = cityNameTextView.get(cityNameTextView.size() - 1).getText();
             for (AndroidElement cityEl : cityNameTextView) {
-                System.out.print(cityEl.getText());
                 if (cityName.equals(cityEl.getText())) {
-                    System.out.println(index);
-                    System.out.println("SizeCard::"+cityNameTextView.size());
-                    System.out.println("SizeCard::"+cityNameCardContainer.size());
-
-
                     return cityEl;// index;
                 }
-                index++;
-                System.out.print("::"+index);
-                System.out.println();
             }
             AppiumUtils.verticalScroll(driver);
             cityNameTextView = driver.findElements(By.id("com.example.harry.myapplication:id/textview_city_name"));
-            cityNameCardContainer = driver.findElements(By.id("com.example.harry.myapplication:id/card_container"));
-            String lastCity2 = cityNameTextView.get(cityNameTextView.size()-1).getText();
-            System.out.println("Last city 2::"+lastCity1);
-
-            if(lastCity1.equals(lastCity2)) {
+            String lastCity2 = cityNameTextView.get(cityNameTextView.size() - 1).getText();
+            if (lastCity1.equals(lastCity2)) {
                 System.out.println("Breaking the loop");
                 break;
             }
@@ -99,7 +86,27 @@ public class DashboardPO extends BasePO {
         int upperY = el.getLocation().getY();
         int lowerY = upperY + el.getSize().getHeight();
         int middleY = (upperY + lowerY) / 2;
-        AppiumUtils.doSwipe((int) (rightX+(screenWidth*0.3)), middleY, leftX, middleY, driver);
+        AppiumUtils.doSwipe((int) (rightX + (screenWidth * 0.3)), middleY, leftX, middleY, driver);
+    }
+
+    public Set<String> getAllCities() {
+        boolean isLastCityPresent = false;
+        Set<String> cityNames = new HashSet<String>();
+        List<AndroidElement> cityNameTextView = driver.findElements(By.id("com.example.harry.myapplication:id/textview_city_name"));
+        String lastCityName = "";
+        while (!isLastCityPresent) {
+            lastCityName = cityNameTextView.get(cityNameTextView.size() - 1).getText();
+            for (AndroidElement city : cityNameTextView) {
+                cityNames.add(city.getText());
+            }
+            AppiumUtils.verticalScroll(driver);
+            cityNameTextView = driver.findElements(By.id("com.example.harry.myapplication:id/textview_city_name"));
+            String lastCityNameAfterScroll = cityNameTextView.get(cityNameTextView.size() - 1).getText();
+            if (lastCityName.equals(lastCityNameAfterScroll)) {
+                break;
+            }
+        }
+        return cityNames;
     }
 
 

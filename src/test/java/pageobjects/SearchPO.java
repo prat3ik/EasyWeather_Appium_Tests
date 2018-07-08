@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.Keys;
+import utils.AppiumUtils;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class SearchPO extends BasePO {
     AndroidElement searchBox;
 
     protected void doSearch(String input) {
+        searchBox.clear();
         searchBox.sendKeys(input);
     }
 
@@ -30,7 +32,10 @@ public class SearchPO extends BasePO {
 
     public void addCity(String cityName) {
         doSearch(cityName);
-        selectFirstSuggestion();
+        if(!AppiumUtils.isElementDisplayed(searchSuggestion)){
+            doSearch(cityName);
+        }
+        searchSuggestion.click();
     }
 
     public void addCities(List<String> cityNames) {

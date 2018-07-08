@@ -18,7 +18,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class BasePO {
     private static final int KEYBOARD_ANIMATION_DELAY = 1000;
     private static final int XML_REFRESH_DELAY = 1000;
-    public final static int IMPLICIT_WAIT = PropertyUtils.getIntegerProperty("implicitWait", 30);
+    public final static int IMPLICIT_WAIT = PropertyUtils.getIntegerProperty("implicitWait", 4);
     public static WaitUtils waitUtils;
     public static Calendar cal;
     /**
