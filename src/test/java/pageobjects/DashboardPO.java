@@ -17,6 +17,12 @@ public class DashboardPO extends BasePO {
         super(driver);
     }
 
+    @AndroidFindBy(xpath = "//android.widget.TextView[@text='Dublin']")
+    AndroidElement firstCityName;
+
+    public void tapOnFirstCity(){
+        firstCityName.click();
+    }
 
     @AndroidFindBy(id = "com.example.harry.myapplication:id/fab")
     AndroidElement addLocationFloatingButton;
@@ -34,14 +40,6 @@ public class DashboardPO extends BasePO {
     public SearchPO tapOnAddLocationFloatingButton() {
         addLocationFloatingButton.click();
         return new SearchPO(driver);
-    }
-
-    @AndroidFindBy(xpath = "//android.widget.TextView[@text='Dublin']")
-    AndroidElement dublinCityTextView;
-
-    public TempretureDetailsPO tapOnDublinCityTextView() {
-        dublinCityTextView.click();
-        return new TempretureDetailsPO(driver);
     }
 
     @AndroidFindBy(id = "com.example.harry.myapplication:id/textview_city_name")
@@ -70,14 +68,16 @@ public class DashboardPO extends BasePO {
         }
         return null;
     }
-//
-//    @AndroidFindBy(id = "com.example.harry.myapplication:id/card_container")
-//    List<AndroidElement> cityNameCardContainer;
+    public WeatherDetailsPO tapOnCity(String cityName){
+        AndroidElement el = getCityCardIndex(cityName);
+        el.click();
+        WeatherDetailsPO po = new WeatherDetailsPO(driver);
+        po.waitTillPageIsLoaded();
+        return po;
+    }
 
     public void removeCity(String cityName) {
-        AndroidElement index = getCityCardIndex(cityName);
-        List<AndroidElement> cityNameCardContainer = driver.findElements(By.id("com.example.harry.myapplication:id/card_container"));
-        AndroidElement el = index;//cityNameCardContainer.get(index);
+        AndroidElement el = getCityCardIndex(cityName);
         Dimension size = driver.manage().window().getSize();
         int screenWidth = size.getWidth();
         int screenHeight = size.getHeight();
@@ -107,6 +107,10 @@ public class DashboardPO extends BasePO {
             }
         }
         return cityNames;
+    }
+
+    public void moveToFirstCity() {
+        AppiumUtils.scrollUpToElement(firstCityName, driver);
     }
 
 

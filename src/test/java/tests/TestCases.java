@@ -1,6 +1,5 @@
 package tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -8,8 +7,9 @@ import pageobjects.*;
 import utils.AssertUtils;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.*;
+
+import static java.time.Duration.ofSeconds;
 
 public class TestCases extends BaseTest {
 
@@ -22,8 +22,76 @@ public class TestCases extends BaseTest {
         dashboardPO = new DashboardPO(driver);
     }
 
+
+    /**
+     * In this test User Can check the weather details for existing as well as newly added cities, Even if app restarts city list does not change and user can check weather details again
+     * <p>
+     * Assertions:
+     * 1) Default cities must be present when app is installed and opened first time.
+     * 2) User can verify weather details for existing/newwly added cities
+     * 3) After App restart the behaviour remains same and User can again check the weather details for existing cities.
+     *
+     * @throws InterruptedException
+     */
     @Test
-    public void verifyUserCanMakeTheOffer() throws InterruptedException, IOException {
+    public void verifyUserCanSeeTheWeatherOfCities() throws InterruptedException {
+        final String londonCity = "London";
+        final String suratCity = "Surat";
+        final String sanFranciscoCity = "San Francisco";
+
+        List<String> defaultCities = DefaultCities.getDefaultCities();
+        Set<String> expectedAvailableCitiesOnDashboard = new HashSet<String>();
+        expectedAvailableCitiesOnDashboard.addAll(defaultCities);
+        expectedAvailableCitiesOnDashboard.add(suratCity);
+        expectedAvailableCitiesOnDashboard.add(sanFranciscoCity);
+
+        dashboardPO.waitTillDashboardPOAppeared();
+        AssertUtils.assertListEquals(new ArrayList<String>(dashboardPO.getAllCities()), DefaultCities.getDefaultCities(), "Default Cities");
+
+        WeatherDetailsPO weatherDetailsPO = dashboardPO.tapOnCity(londonCity);
+        weatherDetailsPO.assertWeather();
+        dashboardPO = weatherDetailsPO.backToDashboard();
+
+        SearchPO searchPO = this.dashboardPO.tapOnAddLocationFloatingButton();
+        searchPO.addCity(suratCity);
+        searchPO = this.dashboardPO.tapOnAddLocationFloatingButton();
+        searchPO.addCity(sanFranciscoCity);
+
+        weatherDetailsPO = this.dashboardPO.tapOnCity(suratCity);
+        weatherDetailsPO.assertWeather();
+        dashboardPO = weatherDetailsPO.backToDashboard();
+        weatherDetailsPO = this.dashboardPO.tapOnCity(sanFranciscoCity);
+        weatherDetailsPO.assertWeather();
+        dashboardPO = weatherDetailsPO.backToDashboard();
+
+        this.restartApp();
+
+        Set<String> actualAvailableAllCitiesOnDashboard = this.dashboardPO.getAllCities();
+        AssertUtils.assertListEquals(new ArrayList<String>(actualAvailableAllCitiesOnDashboard), new ArrayList<String>(expectedAvailableCitiesOnDashboard), "Available Cities on Dashboard");
+
+        weatherDetailsPO = this.dashboardPO.tapOnCity(londonCity);
+        weatherDetailsPO.assertWeather();
+        weatherDetailsPO.backToDashboard();
+        weatherDetailsPO = this.dashboardPO.tapOnCity(suratCity);
+        weatherDetailsPO.assertWeather();
+        weatherDetailsPO.backToDashboard();
+        weatherDetailsPO = this.dashboardPO.tapOnCity(sanFranciscoCity);
+        weatherDetailsPO.assertWeather();
+    }
+
+    /**
+     * This test verify that User can add and remove the cities, and cities list does not change when app restarts.
+     * <p>
+     * Assertions:
+     * 1) Added cities must be present and Removed cities must not be present on Dashboard
+     * 2) After restarting of the app valid cities must be visible
+     *
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    @Test
+    public void verifyUserCanAddAndRemoveTheCities() throws InterruptedException, IOException {
+        final String firstCity = DefaultCities.DUBLIN.getCityName();
         final String viennaCity = "Vienna";
         final String suratCity = "Surat";
         final String berlinCity = "Berlin";
@@ -35,7 +103,7 @@ public class TestCases extends BaseTest {
         final String istanbulCity = "Istanbul";
         final String perthCity = "Perth";
 
-        Set<String> defaultCities = DefaultCities.getDefaultCities();
+        List<String> defaultCities = DefaultCities.getDefaultCities();
         Set<String> expectedAvailableCitiesOnDashboard = new HashSet<String>();
         expectedAvailableCitiesOnDashboard.addAll(defaultCities);
         expectedAvailableCitiesOnDashboard.add(viennaCity);
@@ -48,9 +116,6 @@ public class TestCases extends BaseTest {
         expectedAvailableCitiesOnDashboard.add(melbourneCity);
         expectedAvailableCitiesOnDashboard.add(istanbulCity);
         expectedAvailableCitiesOnDashboard.add(perthCity);
-
-        System.out.println(expectedAvailableCitiesOnDashboard);
-
 
         dashboardPO.waitTillDashboardPOAppeared();
         SearchPO searchPO = dashboardPO.tapOnAddLocationFloatingButton();
@@ -74,8 +139,6 @@ public class TestCases extends BaseTest {
         dashboardPO.tapOnAddLocationFloatingButton();
         searchPO.addCity(perthCity);
 
-        //System.out.println(dashboardPO.getAllCities());
-
         dashboardPO.removeCity(DefaultCities.LONDON.getCityName());
         dashboardPO.removeCity(sanFranciscoCity);
         dashboardPO.removeCity(perthCity);
@@ -84,15 +147,14 @@ public class TestCases extends BaseTest {
         expectedAvailableCitiesOnDashboard.remove(sanFranciscoCity);
         expectedAvailableCitiesOnDashboard.remove(perthCity);
 
-        driver.closeApp();
-        driver.runAppInBackground(Duration.ofSeconds(1));
-
+        dashboardPO.moveToFirstCity();
         Set<String> actualAvailableAllCitiesOnDashboard = dashboardPO.getAllCities();
         AssertUtils.assertListEquals(new ArrayList<String>(actualAvailableAllCitiesOnDashboard), new ArrayList<String>(expectedAvailableCitiesOnDashboard), "Available Cities on Dashboard");
 
+        this.restartApp();
 
-        waitUtils.staticWait(5000);
-        //Assert.assertTrue(cityTempretureDetailsPO.getMakeOfferButton().isDisplayed(), "Make Offer button didn't display");
+        actualAvailableAllCitiesOnDashboard = dashboardPO.getAllCities();
+        AssertUtils.assertListEquals(new ArrayList<String>(actualAvailableAllCitiesOnDashboard), new ArrayList<String>(expectedAvailableCitiesOnDashboard), "Available Cities on Dashboard");
     }
 
     public enum DefaultCities {
@@ -111,8 +173,8 @@ public class TestCases extends BaseTest {
             return cityName;
         }
 
-        public static Set<String> getDefaultCities() {
-            Set<String> defaultCities = new HashSet<String>();
+        public static List<String> getDefaultCities() {
+            List<String> defaultCities = new ArrayList<String>();
             defaultCities.add(DUBLIN.getCityName());
             defaultCities.add(LONDON.getCityName());
             defaultCities.add(NEW_YORK.getCityName());

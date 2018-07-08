@@ -3,17 +3,27 @@ package pageobjects;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.testng.Assert;
 
 import java.util.List;
 
-public class TempretureDetailsPO extends BasePO {
+public class WeatherDetailsPO extends BasePO {
 
-    protected TempretureDetailsPO(AppiumDriver driver) {
+    protected WeatherDetailsPO(AppiumDriver driver) {
         super(driver);
     }
 
     @AndroidFindBy(id = "com.example.harry.myapplication:id/textview_temperature")
     AndroidElement tempretureForTodayTextView;
+
+
+    @AndroidFindBy(id = "com.example.harry.myapplication:id/textview_city_name")
+    AndroidElement cityNameTextView;
+
+
+    @AndroidFindBy(id = "com.example.harry.myapplication:id/textview_current_city_weather")
+    AndroidElement weatherConditionTextView;
+
 
     @AndroidFindBy(id = "com.example.harry.myapplication:id/textview_day_max_temp")
     List<AndroidElement> maxTempretureTextView;
@@ -45,44 +55,44 @@ public class TempretureDetailsPO extends BasePO {
         return dayNameTextView.get(4).getText();
     }
 
-    public String getMaxTempretureForTwoDaysLater() {
-        return maxTempretureTextView.get(0).getText();
+    public AndroidElement getMaxTempretureForTwoDaysLater() {
+        return maxTempretureTextView.get(0);
     }
 
-    public String getMaxTempretureForThreeDaysLater() {
-        return maxTempretureTextView.get(1).getText();
+    public AndroidElement getMaxTempretureForThreeDaysLater() {
+        return maxTempretureTextView.get(1);
     }
 
-    public String getMaxTempretureForFourDaysLater() {
-        return maxTempretureTextView.get(2).getText();
+    public AndroidElement getMaxTempretureForFourDaysLater() {
+        return maxTempretureTextView.get(2);
     }
 
-    public String getMaxTempretureForFiveDaysLater() {
-        return maxTempretureTextView.get(3).getText();
+    public AndroidElement getMaxTempretureForFiveDaysLater() {
+        return maxTempretureTextView.get(3);
     }
 
-    public String getMaxTempretureForSixDaysLater() {
-        return maxTempretureTextView.get(4).getText();
+    public AndroidElement getMaxTempretureForSixDaysLater() {
+        return maxTempretureTextView.get(4);
     }
 
-    public String getMinTempretureForTwoDaysLater() {
-        return minTempretureTextView.get(0).getText();
+    public AndroidElement getMinTempretureForTwoDaysLater() {
+        return minTempretureTextView.get(0);
     }
 
-    public String getMinTempretureForThreeDaysLater() {
-        return minTempretureTextView.get(1).getText();
+    public AndroidElement getMinTempretureForThreeDaysLater() {
+        return minTempretureTextView.get(1);
     }
 
-    public String getMinTempretureForFourDaysLater() {
-        return minTempretureTextView.get(2).getText();
+    public AndroidElement getMinTempretureForFourDaysLater() {
+        return minTempretureTextView.get(2);
     }
 
-    public String getMinTempretureForFiveDaysLater() {
-        return minTempretureTextView.get(3).getText();
+    public AndroidElement getMinTempretureForFiveDaysLater() {
+        return minTempretureTextView.get(3);
     }
 
-    public String getMinTempretureForSixDaysLater() {
-        return minTempretureTextView.get(4).getText();
+    public AndroidElement getMinTempretureForSixDaysLater() {
+        return minTempretureTextView.get(4);
     }
 
     public void getTemp() {
@@ -113,4 +123,26 @@ public class TempretureDetailsPO extends BasePO {
 
     }
 
+    @AndroidFindBy(accessibility = "Navigate up")
+    AndroidElement backArrow;
+
+    public DashboardPO backToDashboard() {
+        backArrow.click();
+        return new DashboardPO(driver);
+    }
+
+    public void assertWeather() {
+        Assert.assertTrue(tempretureForTodayTextView.isDisplayed());
+        Assert.assertTrue(cityNameTextView.isDisplayed());
+        Assert.assertTrue(weatherConditionTextView.isDisplayed());
+        Assert.assertTrue(dayNameTextView.size()==5, "Days were not displayed properly");
+        Assert.assertTrue(maxTempretureTextView.size()==5,"Maximum tempreture may not displayed");
+        Assert.assertTrue(minTempretureTextView.size()==5,"Minimum tempreture may not displayed");
+        Assert.assertTrue(getMaxTempretureForTwoDaysLater().isDisplayed());
+        Assert.assertTrue(getMinTempretureForFiveDaysLater().isDisplayed());
+    }
+
+    public void waitTillPageIsLoaded() {
+        waitUtils.waitForElementToBeVisible(cityNameTextView, driver);
+    }
 }

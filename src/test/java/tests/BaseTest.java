@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -203,5 +204,13 @@ public abstract class BaseTest {
     private void takeLocalScreenshot(String imageName) throws IOException {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(scrFile, new File("target/" + imageName + ".png"));
+    }
+
+    /**
+     * This method will restart the app
+     */
+    public void restartApp(){
+        driver.closeApp();
+        driver.runAppInBackground(Duration.ofSeconds(1));
     }
 }
