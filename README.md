@@ -1,8 +1,20 @@
 # EasyWeather_Appium_Tests
 Automation of EasyWeather Android app
 
+## Technology Stack and Framework
+Technology:
+* Java + TestNG(v6.11) + Java-Appium client(v6.1.0)
 
-## IntelliJ
+Framework supports:
+* Page Object Modeling(POM) based.
+* Purely Object Oriented.
+* Cross Platform support(Android/iOS)
+* Hybrid Testing Framework.
+* Thread-safe execution.
+* Screenshot capture on Failure.
+* Jenkins(CI/CD) Enabled.
+
+## How to setup on IntelliJ
 ### Prerequisites
 - Make sure Appilum local server is running on http://127.0.0.1:4723/ (Or you can change the url on [configuration.properties](https://github.com/prat3ik/EasyWeather_Appium_Tests/blob/master/src/test/resources/configuration.properties))
 - TestNG plugin must be installed on IntelliJ Idea
